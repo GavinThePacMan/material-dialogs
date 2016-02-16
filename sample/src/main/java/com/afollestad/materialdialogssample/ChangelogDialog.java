@@ -1,5 +1,6 @@
 package com.afollestad.materialdialogssample;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ public class ChangelogDialog extends DialogFragment {
         return dialog;
     }
 
+    @SuppressLint("InflateParams")
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -63,7 +65,7 @@ public class ChangelogDialog extends DialogFragment {
             webView.loadData(buf.toString()
                     .replace("{style-placeholder}", getArguments().getBoolean("dark_theme") ?
                             "body { background-color: #444444; color: #fff; }" :
-                            "body { background-color: #EDEDED; color: #000; }")
+                            "body { background-color: #fff; color: #000; }")
                     .replace("{link-color}", colorToHex(shiftColor(accentColor, true)))
                     .replace("{link-color-active}", colorToHex(accentColor))
                     , "text/html", "UTF-8");
