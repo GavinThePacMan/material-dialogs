@@ -3,7 +3,6 @@ package com.afollestad.materialdialogs.util;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -24,15 +23,15 @@ import com.afollestad.materialdialogs.MaterialDialog;
  */
 public class DialogUtils {
 
-    @SuppressWarnings("ConstantConditions")
-    public static float resolveFloat(Context context, int attr) {
-        TypedArray a = context.obtainStyledAttributes(null, new int[]{attr});
-        try {
-            return a.getFloat(0, 0);
-        } finally {
-            a.recycle();
-        }
-    }
+//    @SuppressWarnings("ConstantConditions")
+//    public static float resolveFloat(Context context, int attr) {
+//        TypedArray a = context.obtainStyledAttributes(null, new int[]{attr});
+//        try {
+//            return a.getFloat(0, 0);
+//        } finally {
+//            a.recycle();
+//        }
+//    }
 
     public static int adjustAlpha(int color, @SuppressWarnings("SameParameterValue") float factor) {
         int alpha = Math.round(Color.alpha(color) * factor);
@@ -205,7 +204,7 @@ public class DialogUtils {
         }
     }
 
-    public static void showKeyboard(DialogInterface di, final MaterialDialog.Builder builder) {
+    public static void showKeyboard(@NonNull final DialogInterface di, @NonNull final MaterialDialog.Builder builder) {
         final MaterialDialog dialog = (MaterialDialog) di;
         if (dialog.getInputEditText() == null) return;
         dialog.getInputEditText().post(new Runnable() {
@@ -214,23 +213,17 @@ public class DialogUtils {
                 dialog.getInputEditText().requestFocus();
                 InputMethodManager imm = (InputMethodManager) builder.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null)
-                    imm.showSoftInput(dialog.getInputEditText(), InputMethodManager.SHOW_IMPLICIT);
+                    imm.showSoftInput(dialog.getInputEditText(), InputMethodManager.SHOW_FORCED);
             }
         });
     }
 
-    public static void hideKeyboard(DialogInterface di, final MaterialDialog.Builder builder) {
+    public static void hideKeyboard(@NonNull final DialogInterface di, @NonNull final MaterialDialog.Builder builder) {
         final MaterialDialog dialog = (MaterialDialog) di;
         if (dialog.getInputEditText() == null) return;
-        dialog.getInputEditText().post(new Runnable() {
-            @Override
-            public void run() {
-                dialog.getInputEditText().requestFocus();
-                InputMethodManager imm = (InputMethodManager) builder.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null)
-                    imm.hideSoftInputFromWindow(dialog.getInputEditText().getWindowToken(), 0);
-            }
-        });
+        InputMethodManager imm = (InputMethodManager) builder.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null)
+            imm.hideSoftInputFromWindow(dialog.getCurrentFocus().getWindowToken(), 0);
     }
 
     public static ColorStateList getActionTextStateList(Context context, int newPrimaryColor) {
@@ -256,8 +249,4 @@ public class DialogUtils {
         ta.recycle();
         return colors;
     }
-
-//    public static int getInternalIdentifier(String type, String name) {
-//        return Resources.getSystem().getIdentifier(name, type, "android");
-//    }
 }
